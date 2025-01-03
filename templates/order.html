@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>訂單頁面</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>訂單頁面</h2>
+
+        {% if user %}
+            <p>歡迎，{{ user.username }}！</p>
+        {% else %}
+            <p>歡迎，訪客！</p>
+        {% endif %}
+
+        <!-- 顯示菜單 -->
+        <form method="POST">
+            {% for category, items in menu.items() %}
+                <div class="mt-4">
+                    <h3>{{ category }}</h3>
+                    <div class="row">
+                        {% for item in items %}
+                            <div class="col-md-4">
+                                <div class="card">
+                                    <!-- 顯示商品圖片並設置大小為 300x300 -->
+                                    <img src="{{ url_for('static', filename=item.image) }}" class="card-img-top" alt="{{ item.name }}" width="300" height="300">
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ item.name }}</h5>
+                                        <label for="{{ item.name }}">數量：</label>
+                                        <input type="number" class="form-control" id="{{ item.name }}" name="{{ item.name }}" min="0" value="0">
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endfor %}
+
+            <!-- 顯示推薦商品 -->
+            {% if recommended_items %}
+                <h3>您可能會喜歡：</h3>
+                <div class="row">
+                    {% for item in recommended_items %}
+                        <div class="col-md-4">
+                            <div class="card">
+                                <img src="{{ url_for('static', filename=item.image) }}" class="card-img-top" alt="{{ item.name }}" width="300" height="300">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ item.name }}</h5>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <button type="submit" class="btn btn-primary mt-3">提交訂單</button>
+        </form>
+    </div>
+</body>
+</html>
